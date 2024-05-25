@@ -128,17 +128,20 @@ class GameStore {
     }
 
     public String beliGame(String namaGame, String konsol, String uang) {
-        for (Game game : daftarGame) {
+        java.util.Iterator<Game> iterator = daftarGame.iterator();
+        while (iterator.hasNext()) {
+            Game game = iterator.next();
             if (namaGame.equalsIgnoreCase(game.getNamaGame()) && konsol.equalsIgnoreCase(game.getKonsol())) {
                 int harga = Integer.parseInt(game.getHarga().replace(".", ""));
                 int uangInt = Integer.parseInt(uang.replace(".", ""));
                 if (uangInt < harga) {
                     return "Uang Anda tidak cukup untuk membeli game ini.";
                 } else if (uangInt == harga) {
-                    daftarGame.remove(game);
+                    iterator.remove(); // Use iterator to remove the game
                     return String.format("Game '%s' untuk konsol '%s' telah dibeli. Uang Anda cukup untuk membeli game ini.", namaGame, konsol);
                 } else {
                     int kembalian = uangInt - harga;
+                    iterator.remove(); // Use iterator to remove the game
                     return String.format("Game '%s' untuk konsol '%s' telah dibeli. Uang Anda cukup untuk membeli game ini, berikut adalah kembalian Anda: %,d", namaGame, konsol, kembalian);
                 }
             }
